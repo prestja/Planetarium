@@ -13,7 +13,7 @@ public class CelestialBody : MonoBehaviour {
     [SerializeField] private float eccentricity;
     [SerializeField] private float inclination;
 
-    private const int positionCount = 64;
+    private const int positionCount = 32;
 
     private LineRenderer lineRenderer;
 
@@ -68,20 +68,20 @@ public class CelestialBody : MonoBehaviour {
     private void Start() {
         lineRenderer = GetComponent<LineRenderer>();
         if (lineRenderer)
-            lineRenderer.positionCount = positionCount;
+            lineRenderer.positionCount = positionCount + 1;
+        AdjustLines();
     }
 
     private void Update() {
         if (!parent) // stars or barycenters should not appear to move
             return;
-        transform.position = GetPositionVector(Time.time);
-        AdjustLines();
+        transform.position = parent.transform.position + GetPositionVector(Time.time);
     }
 
     private void AdjustLines() {
-        for (int i = 0; i < positionCount; i++) {
+        for (int i = 0; i < positionCount + 1; i++) {
             float dt = (2.0f * Mathf.PI) / positionCount;
-            Vector3 pos = GetPositionVector(Time.time + dt * i);
+            Vector3 pos = GetPositionVector(dt * (i + 1));
             lineRenderer.SetPosition(i, pos);
         }
     }
@@ -89,8 +89,8 @@ public class CelestialBody : MonoBehaviour {
     private void OnGUI() {
         if (!parent)
             return;
-        GUI.Label(new Rect(0, 0, 200, 40), "Mean anomaly: " + MeanAnomaly(Time.time));
-        GUI.Label(new Rect(0, 20, 200, 40), "Eccentric anomaly: " + EccentricAnomaly(Time.time));
-        GUI.Label(new Rect(0, 40, 200, 40), "True anomaly: " + TrueAnomaly(Time.time));
+        //GUI.Label(new Rect(0, 0, 200, 40), "Mean anomaly: " + MeanAnomaly(Time.time));
+        //GUI.Label(new Rect(0, 20, 200, 40), "Eccentric anomaly: " + EccentricAnomaly(Time.time));
+        //GUI.Label(new Rect(0, 40, 200, 40), "True anomaly: " + TrueAnomaly(Time.time));
     }
 }

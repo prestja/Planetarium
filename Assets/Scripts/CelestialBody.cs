@@ -22,8 +22,9 @@ public class CelestialBody : MonoBehaviour {
     }
 
     private float EccentricAnomaly(float t) {
-        float anomaly = eccentricity < 0.08 ? MeanAnomaly(t) : Mathf.PI;
-        float anomalyPrev = (MeanAnomaly(t) + Mathf.PI) * 4.0f;
+        float meanNorm = MeanAnomaly(t) % 2 * Mathf.PI;
+        float anomaly = eccentricity < 0.08 ? meanNorm : Mathf.PI;
+        float anomalyPrev = (meanNorm + Mathf.PI) * 4.0f;
 
         int itr = 0;
         while (Mathf.Abs(anomaly - anomalyPrev) > 1E-12) {
@@ -32,7 +33,7 @@ public class CelestialBody : MonoBehaviour {
                 break;
             anomalyPrev = anomaly;
             anomaly = anomaly -
-                (anomaly - eccentricity * Mathf.Sin(anomaly) - MeanAnomaly(t)) /
+                (anomaly - eccentricity * Mathf.Sin(anomaly) - meanNorm) /
                 (1 - eccentricity * Mathf.Cos(anomaly));
         }
         return anomaly;
@@ -48,8 +49,6 @@ public class CelestialBody : MonoBehaviour {
     private void Update() {
         if (!parent) // stars or barycenters should not appear to move
             return;
-        //Debug.Log(MeanAnomaly(Time.time));
-        //Debug.Log(EccentricAnomaly(Time.time));
     }
 
     private void OnGUI() {

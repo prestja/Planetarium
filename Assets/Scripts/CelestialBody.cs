@@ -39,7 +39,10 @@ public class CelestialBody : MonoBehaviour {
     }
 
     private float TrueAnomaly(float t) {
-        return 0.0f;
+        float e2 = EccentricAnomaly(t) / 2.0f;
+        float t1 = Mathf.Sqrt(1 + eccentricity);
+        float t2 = Mathf.Sqrt(1 - eccentricity);
+        return 2.0f * Mathf.Atan2(t1 * Mathf.Sin(e2), t2 * Mathf.Cos(e2));
     }
 
     private void Update() {
@@ -52,7 +55,8 @@ public class CelestialBody : MonoBehaviour {
     private void OnGUI() {
         if (!parent)
             return;
-        GUI.Label(new Rect(0, 0, 200, 40), "True anomaly: " + MeanAnomaly(Time.time));
+        GUI.Label(new Rect(0, 0, 200, 40), "Mean anomaly: " + MeanAnomaly(Time.time));
         GUI.Label(new Rect(0, 20, 200, 40), "Eccentric anomaly: " + EccentricAnomaly(Time.time));
+        GUI.Label(new Rect(0, 40, 200, 40), "True anomaly: " + TrueAnomaly(Time.time));
     }
 }

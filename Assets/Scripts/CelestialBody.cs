@@ -10,6 +10,7 @@ public class CelestialBody : MonoBehaviour {
     [SerializeField] private float semiMajorAxis;
     [SerializeField] private float orbitalPeriod;
     [SerializeField] private float eccentricity;
+    [SerializeField] private float inclination;
 
     private float MeanMotion {
         get {
@@ -48,15 +49,19 @@ public class CelestialBody : MonoBehaviour {
 
     private Vector3 GetPositionVector(float t) {
         float trueAnomaly = TrueAnomaly(t);
+
         float c = Mathf.Cos(trueAnomaly);
         float s = Mathf.Sin(trueAnomaly);
         float x = semiMajorAxis * (c - eccentricity);
         float y = semiMajorAxis * Mathf.Sqrt(1.0f - eccentricity * eccentricity) * s;
-        return new Vector3(x, 0, y);
+
+        Vector3 plane = new Vector3(x, 0, y);
+        Vector3 adjusted = Quaternion.Euler(inclination * Mathf.Rad2Deg, 0, 0) * plane;
+        return adjusted;
     }
 
     private void Start() {
-        Debug.LogFormat("Mean motion of {0} radians", MeanMotion);
+        //Debug.LogFormat("Mean motion of {0} radians", MeanMotion);
     }
 
     private void Update() {

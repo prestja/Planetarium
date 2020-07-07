@@ -406,8 +406,9 @@ MonoBehaviour:
   t0: 0
   m0: 0
   semiMajorAxis: 12
-  orbitalPeriod: 20
-  eccentricity: 0.5
+  orbitalPeriod: 5
+  eccentricity: 0
+  inclination: 1.07
 --- !u!1 &1134973773
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,3 +521,4 @@ MonoBehaviour:
   semiMajorAxis: 0
   orbitalPeriod: 0
   eccentricity: 0
+  inclination: 0

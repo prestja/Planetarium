@@ -22,7 +22,7 @@ public class CelestialBody : MonoBehaviour {
     }
 
     private float EccentricAnomaly(float t) {
-        float meanNorm = MeanAnomaly(t) % 2 * Mathf.PI;
+        float meanNorm = MeanAnomaly(t) % (2 * Mathf.PI);
         float anomaly = eccentricity < 0.08 ? meanNorm : Mathf.PI;
         float anomalyPrev = (meanNorm + Mathf.PI) * 4.0f;
 
@@ -46,9 +46,23 @@ public class CelestialBody : MonoBehaviour {
         return 2.0f * Mathf.Atan2(t1 * Mathf.Sin(e2), t2 * Mathf.Cos(e2));
     }
 
+    private Vector3 GetPositionVector(float t) {
+        float trueAnomaly = TrueAnomaly(t);
+        float c = Mathf.Cos(trueAnomaly);
+        float s = Mathf.Sin(trueAnomaly);
+        float x = semiMajorAxis * (c - eccentricity);
+        float y = semiMajorAxis * Mathf.Sqrt(1.0f - eccentricity * eccentricity) * s;
+        return new Vector3(x, 0, y);
+    }
+
+    private void Start() {
+        Debug.LogFormat("Mean motion of {0} radians", MeanMotion);
+    }
+
     private void Update() {
         if (!parent) // stars or barycenters should not appear to move
             return;
+        transform.position = GetPositionVector(Time.time);
     }
 
     private void OnGUI() {

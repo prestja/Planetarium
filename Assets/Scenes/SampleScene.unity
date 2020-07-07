@@ -405,9 +405,9 @@ MonoBehaviour:
   parent: {fileID: 1134973778}
   t0: 0
   m0: 0
-  semiMajorAxis: 40
-  orbitalPeriod: 6
-  eccentricity: 0.2
+  semiMajorAxis: 12
+  orbitalPeriod: 20
+  eccentricity: 0.5
 --- !u!1 &1134973773
 GameObject:
   m_ObjectHideFlags: 0

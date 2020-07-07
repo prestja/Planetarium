@@ -38,10 +38,21 @@ public class CelestialBody : MonoBehaviour {
         return anomaly;
     }
 
+    private float TrueAnomaly(float t) {
+        return 0.0f;
+    }
+
     private void Update() {
         if (!parent) // stars or barycenters should not appear to move
             return;
         //Debug.Log(MeanAnomaly(Time.time));
-        Debug.Log(EccentricAnomaly(Time.time));
+        //Debug.Log(EccentricAnomaly(Time.time));
+    }
+
+    private void OnGUI() {
+        if (!parent)
+            return;
+        GUI.Label(new Rect(0, 0, 200, 40), "True anomaly: " + MeanAnomaly(Time.time));
+        GUI.Label(new Rect(0, 20, 200, 40), "Eccentric anomaly: " + EccentricAnomaly(Time.time));
     }
 }

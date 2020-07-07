@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(LineRenderer))]
 public class CelestialBody : MonoBehaviour {
     [SerializeField] private CelestialBody parent;
     // classical parameters
@@ -11,6 +12,10 @@ public class CelestialBody : MonoBehaviour {
     [SerializeField] private float orbitalPeriod;
     [SerializeField] private float eccentricity;
     [SerializeField] private float inclination;
+
+    private const int positionCount = 64;
+
+    private LineRenderer lineRenderer;
 
     private float MeanMotion {
         get {
@@ -61,13 +66,24 @@ public class CelestialBody : MonoBehaviour {
     }
 
     private void Start() {
-        //Debug.LogFormat("Mean motion of {0} radians", MeanMotion);
+        lineRenderer = GetComponent<LineRenderer>();
+        if (lineRenderer)
+            lineRenderer.positionCount = positionCount;
     }
 
     private void Update() {
         if (!parent) // stars or barycenters should not appear to move
             return;
         transform.position = GetPositionVector(Time.time);
+        AdjustLines();
+    }
+
+    private void AdjustLines() {
+        for (int i = 0; i < positionCount; i++) {
+            float dt = (2.0f * Mathf.PI) / positionCount;
+            Vector3 pos = GetPositionVector(Time.time + dt * i);
+            lineRenderer.SetPosition(i, pos);
+        }
     }
 
     private void OnGUI() {
